@@ -24,6 +24,9 @@ const {
   PRODUCT_REVIEW_CREATE_SUCCESS,
   PRODUCT_REVIEW_CREATE_FAIL,
   PRODUCT_REVIEW_CREATE_RESET,
+  LOCATION_LIST_REQUEST,
+  LOCATION_LIST_SUCCESS,
+  LOCATION_LIST_FAIL,
 } = require('../constants/productConstants');
 
 export const productListReducer = (
@@ -41,6 +44,31 @@ export const productListReducer = (
         page: action.payload.page,
       };
     case PRODUCT_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+// LOCATION_LIST_REQUEST,
+//   LOCATION_LIST_SUCCESS,
+//   LOCATION_LIST_FAIL,
+
+export const locationListReducer = (
+  state = { loading: true, locations: [] },
+  action
+) => {
+  switch (action.type) {
+    case LOCATION_LIST_REQUEST:
+      return { loading: true };
+    case LOCATION_LIST_SUCCESS:
+      return {
+        loading: false,
+        locations: action.payload.locations,
+        pages: action.payload.pages,
+        page: action.payload.page,
+      };
+    case LOCATION_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

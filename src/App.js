@@ -8,10 +8,12 @@ import LoadingBox from './components/LoadingBox';
 import { listProductCategories } from './actions/productActions';
 import MessageBox from './components/MessageBox';
 // import PrivateRoute from './components/PrivateRoute';
+import LocationListScreen from './screens/LocationListScreen';
 import ProductScreen from './screens/ProductScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import SigninScreen from './screens/SigninScreen';
 import { signout } from './actions/userActions';
+
 
 function App() {
   const cart = useSelector((state) => state.cart);
@@ -119,7 +121,7 @@ function App() {
           <Route path="/product/:id" component={ProductScreen} exact></Route>
           <Route path="/signin" component={SigninScreen}></Route>
           <Route path="/register" component={RegisterScreen}></Route>
-          {/* <Route path="/location" component={ShippingAddressScreen}></Route> */}
+          <Route path="/location" component={LocationListScreen}></Route>
 
           
 

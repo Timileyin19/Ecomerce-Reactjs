@@ -1,5 +1,8 @@
 import Axios from 'axios';
 import {
+  LOCATION_LIST_REQUEST,
+  LOCATION_LIST_SUCCESS,
+  LOCATION_LIST_FAIL,
     // PRODUCT_CREATE_FAIL,
     // PRODUCT_CREATE_REQUEST,
     // PRODUCT_CREATE_SUCCESS,
@@ -65,6 +68,21 @@ export const listProductCategories = () => async (dispatch) => {
       dispatch({ type: PRODUCT_CATEGORY_LIST_FAIL, payload: error.message });
     }
   };
+
+
+  export const deliveryLocations = () => async (dispatch) => {
+    dispatch({
+      type: LOCATION_LIST_REQUEST,
+    });
+    try {
+      const { data } = await  Axios.get(`https://v2.foodlocker.com.ng/apiv1?action=location`);
+      dispatch({ type: LOCATION_LIST_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({ type: LOCATION_LIST_FAIL, payload: error.message })
+    }
+  }
+
+  
 
 
   export const detailsProduct = (productId) => async (dispatch) => {
