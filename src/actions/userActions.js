@@ -26,16 +26,28 @@ import {
   // USER_TOPSELLERS_LIST_FAIL,
 } from '../constants/userConstants';
 
-export const register = (name, email, phone, country, password) => async (dispatch) => {
-  dispatch({ type: USER_REGISTER_REQUEST, payload: { email, password } });
+export const register = (name, email, phone, country, password, password2) => async (dispatch) => {
+  dispatch({ type: USER_REGISTER_REQUEST, payload: { name, email, phone, country, password, password2 } });
+  
+
+//   {
+//     "name" : "John Doe",
+//     "email" : "doe@gmail.com",
+//     "phone" : "08109383832",
+//     "country" : "Nigeria",
+//     "password" : "password",
+//     "password2" : "password"
+// }
+
+  let user = {};
+  user.name = name;
+  user.email = email;
+  user.phone = phone;
+  user.country = country;
+  user.password = password;
+  user.password2 = password2 
   try {
-    const { data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1/action=register', {
-      name,
-      email,
-      phone,
-      country,
-      password,
-    });
+    const { data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1?action=register', user);
     dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
     localStorage.setItem('userInfo', JSON.stringify(data));
@@ -53,7 +65,7 @@ export const register = (name, email, phone, country, password) => async (dispat
 export const signin = (email, password) => async (dispatch) => {
   dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
   try {
-    const { data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1/action=login', { email, password });
+    const { data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1?action=login', { email, password });
     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {

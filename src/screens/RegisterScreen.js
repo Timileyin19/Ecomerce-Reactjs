@@ -26,7 +26,7 @@ export default function RegisterScreen(props) {
     if (password !== password2) {
       alert('Password and confirm password are not match');
     } else {
-      dispatch(register(name, email, phone, country, password));
+      dispatch(register(name, email, phone, country, password, password2));
     }
   };
   useEffect(() => {
@@ -93,10 +93,10 @@ export default function RegisterScreen(props) {
           ></input>
         </div>
         <div>
-          <label htmlFor="confirmPassword">Confirm Password</label>
+          <label htmlFor="password2">Confirm Password</label>
           <input
             type="password"
-            id="confirmPassword"
+            id="password2"
             placeholder="Enter confirm password"
             required
             onChange={(e) => setPassword2(e.target.value)}
