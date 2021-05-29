@@ -26,6 +26,7 @@ import {
   // USER_TOPSELLERS_LIST_FAIL,
 } from '../constants/userConstants';
 
+
 export const register = (name, email, phone, country, password, password2) => async (dispatch) => {
   dispatch({ type: USER_REGISTER_REQUEST, payload: { name, email, phone, country, password, password2 } });
   
@@ -45,12 +46,22 @@ export const register = (name, email, phone, country, password, password2) => as
   user.phone = phone;
   user.country = country;
   user.password = password;
-  user.password2 = password2 
+  user.password2 = password2;
+  user.action = "register";
+  user.issubmit = 1;
   try {
-    const { data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1?action=register', user);
+    const { data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1', user);
+    
     dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-    dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    // my_signin(email, password);
+      user.action = "login";
+      
+      const { signin_data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1', user);
+      console.log(signin_data);
+    
+    dispatch({ type: USER_SIGNIN_SUCCESS, payload: signin_data.data });
+    localStorage.setItem('userInfo', JSON.stringify(signin_data.data));
+    
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
@@ -62,12 +73,21 @@ export const register = (name, email, phone, country, password, password2) => as
   }
 };
 
+
+
 export const signin = (email, password) => async (dispatch) => {
+  console.log("Signin Function");
   dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
   try {
-    const { data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1?action=login', { email, password });
-    dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    let user = {};
+    user.email = email;
+    user.password = password;
+    user.action = "login";
+    user.issubmit = 1;
+    const { data } = await Axios.post('https://v2.foodlocker.com.ng/apiv1', user);
+    dispatch({ type: USER_SIGNIN_SUCCESS, payload: data.data });
+    localStorage.setItem('userInfo', JSON.stringify(data.data));
+    document.location.href = '/';
   } catch (error) {
     dispatch({
       type: USER_SIGNIN_FAIL,
