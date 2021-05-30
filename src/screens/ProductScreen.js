@@ -14,8 +14,8 @@ export default function ProductScreen(props) {
   const [qty, setQty] = useState(1);
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
-//   const userSignin = useSelector((state) => state.userSignin);
-//   const { userInfo } = userSignin;
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
 
   useEffect(() => {
     // productDetails1 = detailsProduct(productId);
@@ -42,8 +42,26 @@ export default function ProductScreen(props) {
 //     dispatch(detailsProduct(productId));
 //   }, [dispatch, productId, successReviewCreate]);
 
-  const addToCartHandler = (id) => {
-      addToCart(id, 1);
+  const addToCartHandler = (id, qty) => {
+  if (userInfo) {
+    let request_body = {};
+    request_body.action = "save_to_cart";
+    request_body.user_id = Number(userInfo.id);
+    request_body.products = id;
+    request_body.quantities = qty;
+    request_body.sku_index = 0; 
+    request_body.issubmit = 1;
+
+    // console.log(request_body);
+    dispatch(addToCart(request_body));
+
+    // const { data } = Axios.post(`https://v2.foodlocker.com.ng/apiv1`, request_body);
+    // console.log(data);
+  } else {
+    document.location.href = '/signin';
+  }
+
+      // addToCart(id, Number(qty));
     // props.history.push(`/cart/${productId}?qty=${qty}`);
   };
 
@@ -148,12 +166,7 @@ export default function ProductScreen(props) {
                         </div>
                       </li>
                       <li>
-                        <button
-                          onClick={addToCartHandler(product.social_meta_data.id)}
-                          className="primary block"
-                        >
-                          Add to Cart
-                        </button>
+                        <button onClick={() => addToCartHandler(product.data.id, qty)} className="primary block"> Add to Cart </button>
                       </li>
                     </>
                   )}

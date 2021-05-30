@@ -15,7 +15,9 @@ import SigninScreen from './screens/SigninScreen';
 import { signout } from './actions/userActions';
 
 
+
 function App() {
+  let my_cartItems = JSON.parse(localStorage.getItem('cartItems'));
   const cart = useSelector((state) => state.cart);
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const { cartItems } = cart;
@@ -34,6 +36,11 @@ function App() {
   } = productCategoryList;
   useEffect(() => {
     dispatch(listProductCategories());
+    my_cartItems = JSON.parse(localStorage.getItem('cartItems'));
+    // if (userInfo) {
+    //   dispatch(getUserCart(userInfo.id));
+    //   cartItems = JSON.parse(localStorage.getItem('cartItems'));
+    // }
   }, [dispatch]);
 
   return (
@@ -53,13 +60,14 @@ function App() {
             </Link>
           </div>
           <div>
-        <Link to="/cart">
+            {userInfo ? (
+              <>
+              <Link to={"/cart/" + userInfo.id}>
               Cart
-              {cartItems.length > 0 && (
-                <span className="badge">{cartItems.length}</span>
+              {my_cartItems?.length > 0 && (
+                <span className="badge">{my_cartItems?.length}</span>
               )}
             </Link>
-            {userInfo ? (
               <div className="dropdown">
                 <Link to="#">
                   {userInfo.name} <i className="fa fa-caret-down"></i>{' '}
@@ -78,6 +86,7 @@ function App() {
                   </li>
                 </ul>
               </div>
+              </>
             ) : (
               <Link to="/signin">Sign In</Link>
             )}

@@ -8,23 +8,32 @@ import Axios from 'axios';
 //   CART_ADD_ITEM_FAIL,
 // } from '../constants/cartConstants';
 import { detailsProduct } from './productActions';
-
-export const addToCart = (productId, qty) => async (dispatch, getState) => {
-    let product = detailsProduct(productId);
-
-  const { data } = await Axios.post(`https://v2.foodlocker.com.ng/apiv1/action=save_to_cart`, product, qty);
-  // console.log(data);
+// dispatch, getState
+export const addToCart = (body) => async (dispatch, getState) => {
+    
+  const { data } = await Axios.post(`https://v2.foodlocker.com.ng/apiv1?action=save_to_cart`, body);
+  document.location.href = `/cart/${body.user_id}`;
+  document.location.reload();
 };
+
 
 // User must be authenticated
 export const getUserCart = (userId) => async (dispatch) => {
     const { data } = await Axios.get(`https://v2.foodlocker.com.ng/apiv1?action=get_cart&user_id=${userId}`);
     // console.log(data);
-    dispatch({ payload: data });
+    localStorage.setItem(
+        'cartItems' ,
+        JSON.stringify(data.cart.order_items)
+    );
+    // return data;
+    // dispatch({ payload: data });
 }
 
-export const removeItemFromCart = (userId, cartId) => async () => {
+export const removeItemFromCart = (cartId, userId) => async () => {
     const { data } = await Axios.get(`https://v2.foodlocker.com.ng/apiv1?action=delete_cart&user_id=${userId}&id=${cartId}`);
+
+    document.location.href = '/';
+    document.location.reload();
 
     // console.log(data);
 }
